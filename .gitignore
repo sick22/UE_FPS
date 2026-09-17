@@ -1,0 +1,45 @@
+# Visual Studio 2022 & IDE Files
+.vs/
+*.sln
+*.slnx
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.opendb
+*.VC.db
+*.VC.opendb
+*.VC.VC.opendb
+
+# JetBrains Rider & VS Code
+.idea/
+.vscode/
+
+# Unreal Engine Folders
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Build/
+
+# Plugins directories
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
+
+# Xcode (macOS/iOS)
+*.xcodeproj
+*.xcworkspace
+
+# OS Generated Files
+Thumbs.db
+Desktop.ini
+.DS_Store
+$RECYCLE.BIN/
+
+# Crash dumps & temp files
+*.log
+*.dmp
+*.tmp
