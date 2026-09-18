@@ -3,8 +3,11 @@
 
 #include "Characters/ShooterCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Combat/CombatComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 
 
 
@@ -37,6 +40,9 @@ AShooterCharacter::AShooterCharacter()
 	GetMesh()->bReceivesDecals = false;
 
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
+
+	Combat = CreateDefaultSubobject<UCombatComponent>("Combat");
+	Combat->SetIsReplicated(true);
 }
 
 void AShooterCharacter::Tick(float DeltaTime)
@@ -49,12 +55,49 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	UEnhancedInputComponent* ShooterInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
+	ShooterInputComponent->BindAction(CycleWeaponAction, ETriggerEvent::Started,this, &AShooterCharacter::Input_CycleWeapon);
+	ShooterInputComponent->BindAction(ReloadWeaponAction, ETriggerEvent::Started,this, &AShooterCharacter::Input_ReloadWeapon);
+	ShooterInputComponent->BindAction(FireWeaponAction, ETriggerEvent::Started,this, &AShooterCharacter::Input_FireaWeapon_Pressed);
+	ShooterInputComponent->BindAction(FireWeaponAction, ETriggerEvent::Completed,this, &AShooterCharacter::Input_FireaWeapon_Released);
+	ShooterInputComponent->BindAction(AimWeaponAction, ETriggerEvent::Started,this, &AShooterCharacter::Input_Aim_Pressed);
+	ShooterInputComponent->BindAction(AimWeaponAction, ETriggerEvent::Completed,this, &AShooterCharacter::Input_Aim_Released);
 }
 
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AShooterCharacter::Input_CycleWeapon()
+{
+	Combat->Initiate_CycleWeapon();
+}
+
+void AShooterCharacter::Input_ReloadWeapon()
+{
+	Combat->Initiate_ReloadWeapon();
+}
+
+void AShooterCharacter::Input_FireaWeapon_Pressed()
+{
+	Combat->Initiate_FireWeapon_Pressed();
+}
+
+void AShooterCharacter::Input_FireaWeapon_Released()
+{
+	Combat->Initiate_FireWeapon_Released();
+}
+
+void AShooterCharacter::Input_Aim_Pressed()
+{
+	Combat->Initiate_Aim_Pressed();
+}
+
+void AShooterCharacter::Input_Aim_Released()
+{
+	Combat->Initiate_Aim_Released();
 }
 
 
