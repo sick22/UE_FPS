@@ -64,6 +64,31 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	ShooterInputComponent->BindAction(AimWeaponAction, ETriggerEvent::Completed,this, &AShooterCharacter::Input_Aim_Released);
 }
 
+void AShooterCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if (IsValid(Combat))
+	{
+		Combat->SpawnInventory();
+	}
+}
+
+FName AShooterCharacter::GetWeaponAttachPoint_Implementation(const FGameplayTag& WeaponType) const
+{
+	checkf(Combat->WeaponData, TEXT("No Weapon Data Asset = Pleaese fill out BP_shooterCharacter"));
+	return Combat->WeaponData->GripPoints.FindChecked(WeaponType);
+}
+
+USkeletalMeshComponent* AShooterCharacter::GetMesh1P_Implementation() const
+{
+	return Mesh1P;
+}
+
+USkeletalMeshComponent* AShooterCharacter::GetMesh3P_Implementation() const
+{
+	return GetMesh();
+}
+
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
